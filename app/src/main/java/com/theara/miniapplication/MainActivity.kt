@@ -2,6 +2,7 @@ package com.theara.miniapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ListView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,11 +21,23 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-    }
+        val courses = listOf(
+            Course("Kotlin",       "For web and mobile, Build API"),
+            Course("Java",         "Backend Development"),
+            Course("JavaScript",   "Web Development"),
+            Course("Python",       "AI & Data Science"),
+            Course("Spring Boot",  "Microservices & REST API")
+        )
 
-    private fun navigateToMainScreen() {
-        val intent = Intent(this, MainActivity2::class.java)
-        startActivity(intent)
-        finish() // Optional: close this activity so the user cannot go back to login
+        val listView = findViewById<ListView>(R.id.listView1)
+        listView.adapter = CourseAdapter(this, courses)
+
+        // ✅ Click → send title to DetailActivity via Intent
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("TITLE", courses[position].title)
+            intent.putExtra("DESC",  courses[position].description)
+            startActivity(intent)
+        }
     }
 }
